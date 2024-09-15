@@ -4,7 +4,7 @@ from numpy.random import normal
 import matplotlib.pyplot as plt
 
 '''
-    Code that uses a random walk function that sampled from a gaussian to match the Apple stock over 2 years,
+    Code that uses a random walk function sampled from a gaussian to match the Apple stock over 2 years,
 with a 1 day trading frequency. I tried to optimise the volatility and growth by minimising the MSE.
 This does not work well, as the lowest MSE is always the one with the lowest volatility possible (although
 volatility is normally 10-20%). So set volatility constant at 15% and optimised the growth parameter
