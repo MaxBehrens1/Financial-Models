@@ -14,7 +14,7 @@ N = 3 # number of time steps
 u = 1.1 # up multiplier
 d = 1/u # down multiplier to ensure joining of tree
 dt = t_mat / N
-volatility = (u - 1) / np.sqrt(dt) # chosen simple solution to simultaneous eqns
+volatility = (u - d) / (2 * np.sqrt(dt)) # chosen simple solution to simultaneous eqns
 
 def binomail_tree(S0, strike, t_mat, r, N, u, volatility, dt):
     # asset prices at maturity
