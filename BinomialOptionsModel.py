@@ -13,10 +13,10 @@ r = 0.06 # anual interest
 N = 3 # number of time steps
 u = 1.1 # up multiplier
 d = 1/u # down multiplier to ensure joining of tree
-dt = t_mat / N
-volatility = (u - d) / (2 * np.sqrt(dt)) # chosen simple solution to simultaneous eqns
 
-def binomail_tree(S0, strike, t_mat, r, N, u, volatility, dt):
+def binomail_tree(S0, strike, t_mat, r, N, u):
+    dt = t_mat / N
+    
     # asset prices at maturity
     asset_price = S0 * u**(np.arange(0, N+1, 1)) * d**(np.arange(N, -1, -1))
     print('Asset prices at expiery:', asset_price)
@@ -26,9 +26,9 @@ def binomail_tree(S0, strike, t_mat, r, N, u, volatility, dt):
     print('Option values at expiery:', option_value)
     
     # stepping backwards through tree
-    pprime = 0.5 + (r * np.sqrt(dt)) / (2 * volatility)
+    pprime = (1 - d + r*dt) / (u - d)
     for i in np.arange(N, 0, -1):
         option_value = (pprime * option_value[1:i+1] + (1 - pprime) * option_value[0:i]) / (1 + dt * r)
     print('Initial option value:', option_value)
 
-binomail_tree(S0, strike, t_mat, r, N, u, volatility, dt)
+binomail_tree(S0, strike, t_mat, r, N, u)
