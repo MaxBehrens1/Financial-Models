@@ -6,4 +6,4 @@ Code that uses a random walk function sampled from a gaussian to match the Apple
 
 ## 2. BinomialOptionsModel.py
 
-Code that uses the binomial model to value vanilla european call options for a simple asset. I use the equations $V = \frac{p'V^{+} + (1-p')V^{-}}{(1 + r.dt}$. Where p prime is the risk-free probability, r is the interest rate, and dt is the time-step
+Code that uses the binomial model to value vanilla european call options for a simple asset. I use the equations $V = \frac{p'V^{+} + (1-p')V^{-}}{1 + r.dt}$. Where p prime is the risk-free probability, r is the interest rate, dt is the time-step and $V^+$ and $V^-$ are the higher and lower value of the option. 
