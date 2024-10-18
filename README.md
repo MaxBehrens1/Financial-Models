@@ -1,4 +1,4 @@
-# CQF-models
+# Financial-Models
 
 ## 1. LognormalRandomWalk.py
 
