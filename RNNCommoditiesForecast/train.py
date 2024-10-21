@@ -15,7 +15,7 @@ Hyperparameters
 window_size = 40
 learning_rate = 0.01
 h_size = 50
-num_epochs = 10
+num_epochs = 100
 test_percentage = 0.2 # Fraction of data that will be used for testing
 layers = 1
 
@@ -42,35 +42,47 @@ testing_set = arr_ts_data[-cut_off:]
 training_data = input_data(training_set, window_size)
 testing_data = input_data(testing_set, window_size)
 
+
 """
 Training the NN
 """
 # Initialising model
 in_size = len(training_data[0][0][0]) 
 out_size = len(training_data[0][1])
-model = LSTM(input_size = in_size, hidden_size = h_size, num_layers = layers, output_size = out_size)
+model = LSTM(input_size = in_size, hidden_size = h_size, num_layers = layers, output_size = out_size, seq_size = 1)  
 
 #Setting loss and optimniser functions
 criterion = nn.MSELoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
+print("Starting training")
+data_loss = []
 for epoch in range(num_epochs):
-    total_loss =0
-    for seq, y_train in training_data:
-        seq = torch.tensor(seq, dtype=torch.float32)
-        y_train = torch.tensor(y_train, dtype=torch.float32)
-        outputs = model(seq.unsqueeze(-1)).squeeze()
+    # Updates the model after every 'window' input
+    total_loss = 0
+    model.train()
+    for inputs, expected in training_data:
         optimizer.zero_grad()
-        loss = criterion(outputs, y_train)
-        total_loss += loss
+        model.hidden = (torch.zeros(layers,1,model.hidden_size),
+                       torch.zeros(layers,1,model.hidden_size))
+        
+        inputs = inputs.unsqueeze(0) # To turn into 3D array: [seq_len (1 for this case as we update after every step), window size, input size]
+        prediction = model(inputs)
+        prediction = prediction.squeeze(1) # To turn into 1D array to compare to expected
+        loss = criterion(prediction, expected)
+        total_loss += loss.item()
+
         loss.backward()
         optimizer.step()
-        
-    print(f'Epoch: {epoch+1:2}, Loss: {total_loss.item():10.8f}')
 
-
-
-
-
-
+    average_loss = total_loss / len(training_data)
+    data_loss.append(average_loss)
+    print(f"Epoch {epoch+1}, Loss {total_loss}")
+    
+plt.plot(data_loss, 'x')
+plt.grid()
+plt.title("Loss")
+plt.xlabel("Epoch")
+plt.ylabel("Loss")
+plt.show()
     

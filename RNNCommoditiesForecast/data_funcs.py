@@ -48,8 +48,8 @@ def input_data(seq, ws):
     L = len(seq)
     
     for i in range(L-ws):
-        window = torch.tensor(seq[i:i+ws])
-        label = torch.tensor(seq[i+ws:i+ws+1, 3])
+        window = torch.tensor(seq[i:i+ws], dtype = torch.float32)
+        label = torch.tensor(seq[i+ws:i+ws+1, 3], dtype = torch.float32)
         out.append((window,label))
     
     return out
