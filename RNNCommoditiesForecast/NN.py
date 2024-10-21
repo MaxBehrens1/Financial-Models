@@ -11,11 +11,11 @@ class LSTM(nn.Module):
         self.num_layers = num_layers
         self.lstm = nn.LSTM(input_size, hidden_size, num_layers, batch_first=True)
         self.linear = nn.Linear(hidden_size, output_size)
-        self.hidden = (torch.zeros(self.num_layers, seq_size, self.hidden_size, dtype=torch.float32), 
+        self.h0c0 = (torch.zeros(self.num_layers, seq_size, self.hidden_size, dtype=torch.float32), 
                       torch.zeros(self.num_layers, seq_size, self.hidden_size, dtype=torch.float32))
-        
-    def forward(self, seq):    
-        out, self.hidden = self.lstm(seq, self.hidden)
+
+    def forward(self, seq): 
+        out, self.h0C0 = self.lstm(seq, self.h0c0)
         out = self.linear(out[:,-1,:])
         return out
     
